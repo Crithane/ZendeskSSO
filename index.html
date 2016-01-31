@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible"      content="IE=edge">
+  <meta name="viewport"                   content="width=device-width,initial-scale=1">
+  <meta name="author"                     content="Tim Langley">
+  <meta name="description"                content="" />
+
+  <title>CANDDi&nbsp;&raquo;&nbsp;Login </title>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/canddi.css">
+
+
+  <link rel="apple-touch-icon" sizes="57x57"    href="/static/favicon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114"  href="/static/favicon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72"    href="/static/favicon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144"  href="/static/favicon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60"    href="/static/favicon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120"  href="/static/favicon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76"    href="/static/favicon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152"  href="/static/favicon/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180"  href="/static/favicon/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/static/favicon/favicon-192x192.png"  sizes="192x192">
+  <link rel="icon" type="image/png" href="/static/favicon/favicon-160x160.png"  sizes="160x160">
+  <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png"    sizes="96x96">
+  <link rel="icon" type="image/png" href="/static/favicon/favicon-16x16.png"    sizes="16x16">
+  <link rel="icon" type="image/png" href="/static/favicon/favicon-32x32.png"    sizes="32x32">
+  <link rel="shortcut icon" href="/static/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-TileImage" content="/static/favicon/mstile-144x144.png">
+</head>
+<body id="top">
+  <header  class="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-8">
+          <div class="header-logo-container">
+            <a href="/" class="header-logo"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="jumbotron">
+    <div class="container">
+      <div id="root" style="width: 280px; margin: 40px auto; padding: 10px;"></div>
+      <script src="https://cdn.auth0.com/js/lock-8.2.min.js"></script>
+      <script>
+
+        var lock = new Auth0Lock(
+          'bNyem1TAHwV4teqptnJdqILPMUSupD1T',
+          'canddi.eu.auth0.com'
+        );
+
+        lock.show({
+            container: 'root',
+            icon : 'https://s3-eu-west-1.amazonaws.com/auth0.canddi.com/canddi_logo.png',
+            primaryColor: "#ffa336",
+            gravatar: true
+          },
+          function (err, profile, id_token) {
+            if (err) {
+              console.error('Something went wrong!', err);
+            } else if (profile.zendesk_jwt_url) {
+              window.location = profile.zendesk_jwt_url;
+            }
+          }
+        );
+      </script>
+    </div>
+  </div>
+</body>
+</html>
+
