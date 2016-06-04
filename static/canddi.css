@@ -1396,3 +1396,45 @@ body {
 .modal-backdrop {
   z-index : 0;
 }
+
+.navbar-default {
+  background-color: #48AFCC;
+  text-align:       center;
+  padding: 5px 0px;
+}
+
+.navbar-brand {
+  display: inline-block;
+  background-image: url("/static/img/canddi-support-logo-solid.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  -ms-behavior: url(js/backgroundsize.htc);
+  width:  150px;
+  margin: 0 20px;
+  height: 55px;
+  background-color: #48AFCC !important;
+}
+
+.navbar-nav {
+    padding-top: 6px;
+}
+.navbar-nav>li>a {
+    line-height: 10px;
+}
+.navbar-default .navbar-nav>li>a,
+.navbar-default .navbar-text {
+    color: #fff;
+    margin-right: 5px;
+}
+.navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li>a:active {
+    color: #646B75;
+    background-color: #fff !important;
+}
+.navbar-default .navbar-nav>.active>a {
+    border-radius: 4px;
+    line-height: 12px;
+    background-color: #fff;
+}
+
