@@ -1437,4 +1437,7 @@ body {
     line-height: 12px;
     background-color: #fff;
 }
-
+.auth0-lock-center {
+  border: 1px solid #A0A0A0;
+  border-radius: 3px;
+}

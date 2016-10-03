@@ -45,31 +45,44 @@
   <div class="jumbotron">
     <div class="container">
       <div id="root" style="width: 280px; margin: 40px auto; padding: 10px;"></div>
-      <script src="https://cdn.auth0.com/js/lock-9.1.min.js"></script>
+      <script src="https://cdn.auth0.com/js/lock/10.4.0/lock.min.js"></script>
       <script>
 
         var lock = new Auth0Lock(
-          'bNyem1TAHwV4teqptnJdqILPMUSupD1T',
-          'canddi.eu.auth0.com'
-        );
+                    'bNyem1TAHwV4teqptnJdqILPMUSupD1T',
+                    'canddi.eu.auth0.com',
+                    {
+                      container:      'root',
+                      languageDictionary: {
+                        emailInputPlaceholder: "Email",
+                        passwordInputPlaceholder: "Password",
+                        title: "Log in"
+                      },
+                      theme: {
+                        logo:           'https://s3-eu-west-1.amazonaws.com/auth0.canddi.com/canddi_logo.png',
+                        primaryColor:   '#ffa336',
+                        labeledSubmitButton: false
+                      },
+                      auth: {
+                        responseType: 'token'
+                      }
+                    }
+                );
 
-        lock.show({
-            container: 'root',
-            icon : 'https://s3-eu-west-1.amazonaws.com/auth0.canddi.com/canddi_logo.png',
-            primaryColor: "#ffa336",
-            gravatar: true
-          },
-          function (err, profile, id_token) {
-            if (err) {
-              console.error('Something went wrong!', err);
-            } else if (profile.zendesk_jwt_url) {
+        lock.show();
+        lock.on("authenticated", function(authResult) {
+          lock.getProfile(authResult.idToken, function(error, profile) {
+            if (error) {
+              console.error('Something went wrong!', error);
+            }
+            else if (profile.zendesk_jwt_url) {
               window.location = profile.zendesk_jwt_url;
             }
-          }
-        );
+          });
+        });
+
       </script>
     </div>
   </div>
 </body>
 </html>
-
