@@ -45,7 +45,7 @@
   <div class="jumbotron">
     <div class="container">
       <div id="root" style="width: 280px; margin: 40px auto; padding: 10px;"></div>
-      <script src="https://cdn.auth0.com/js/lock/10.4.0/lock.min.js"></script>
+      <script src="https://cdn.auth0.com/js/lock/10.6.1/lock.min.js"></script>
       <script>
 
         var lock = new Auth0Lock(
@@ -69,18 +69,40 @@
                     }
                 );
 
-        lock.show();
-        lock.on("authenticated", function(authResult) {
-          lock.getProfile(authResult.idToken, function(error, profile) {
-            if (error) {
-              console.error('Something went wrong!', error);
-            }
-            else if (profile.zendesk_jwt_url) {
-              window.location = profile.zendesk_jwt_url;
-            }
-          });
-        });
+        if(window.location.hash) {
+            // Listen for the authenticated event and get profile
+            lock.on("authenticated", function(authResult) {
+                lock.getProfile(authResult.idToken, function(error, profile) {
+                    if (error) {
+                        fnShowLock("Sorry, an error occurred. " + error);
+                        return;
+                    }
+                    window.location = profile.zendesk_jwt_url;
+                });
+            });
 
+            lock.on("authorization_error", function(error) {
+                fnShowLock(error.error_description);
+            });
+        } else {
+            fnShowLock();
+        }
+
+        /**
+         * Shows the Auth0 lock.
+         * @param  {String} err   An error to be displayed. (optional)
+         * @return {Void}
+         */
+        function fnShowLock(err) {
+            var objParams = {};
+            if(err) {
+                objParams.flashMessage = {
+                    type: 'error',
+                    text: err
+                }
+            }
+            lock.show(objParams);
+        }
       </script>
     </div>
   </div>
