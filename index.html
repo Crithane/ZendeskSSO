@@ -32,8 +32,16 @@
   <link rel="shortcut icon" href="/static/favicon/favicon.ico">
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="msapplication-TileImage" content="/static/favicon/mstile-144x144.png">
+  {% if site.env == "production" %}
+      {% include googleTagManager.html %}
+  {% endif %}
+
 </head>
 <body id="top">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-54PRM5"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid" style="margin:0 20px">
       <!-- Brand and toggle get grouped for better mobile display -->
