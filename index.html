@@ -10,28 +10,6 @@
 
   <title>CANDDi&nbsp;&raquo;&nbsp;Login </title>
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="static/canddi.css">
-
-
-  <link rel="apple-touch-icon" sizes="57x57"    href="/static/favicon/apple-touch-icon-57x57.png">
-  <link rel="apple-touch-icon" sizes="114x114"  href="/static/favicon/apple-touch-icon-114x114.png">
-  <link rel="apple-touch-icon" sizes="72x72"    href="/static/favicon/apple-touch-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="144x144"  href="/static/favicon/apple-touch-icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="60x60"    href="/static/favicon/apple-touch-icon-60x60.png">
-  <link rel="apple-touch-icon" sizes="120x120"  href="/static/favicon/apple-touch-icon-120x120.png">
-  <link rel="apple-touch-icon" sizes="76x76"    href="/static/favicon/apple-touch-icon-76x76.png">
-  <link rel="apple-touch-icon" sizes="152x152"  href="/static/favicon/apple-touch-icon-152x152.png">
-  <link rel="apple-touch-icon" sizes="180x180"  href="/static/favicon/apple-touch-icon-180x180.png">
-  <link rel="icon" type="image/png" href="/static/favicon/favicon-192x192.png"  sizes="192x192">
-  <link rel="icon" type="image/png" href="/static/favicon/favicon-160x160.png"  sizes="160x160">
-  <link rel="icon" type="image/png" href="/static/favicon/favicon-96x96.png"    sizes="96x96">
-  <link rel="icon" type="image/png" href="/static/favicon/favicon-16x16.png"    sizes="16x16">
-  <link rel="icon" type="image/png" href="/static/favicon/favicon-32x32.png"    sizes="32x32">
-  <link rel="shortcut icon" href="/static/favicon/favicon.ico">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="msapplication-TileImage" content="/static/favicon/mstile-144x144.png">
   <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -42,81 +20,71 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 </head>
 <body id="top">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-54PRM5"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid" style="margin:0 20px">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <a href="#!/" class="navbar-brand"></a>
-      </div>
-    </div>
-  </nav>
-  <div class="jumbotron">
-    <div class="container">
-      <div id="root" style="width: 280px; margin: 40px auto; padding: 10px;"></div>
-      <script src="https://cdn.auth0.com/js/lock/10.6.1/lock.min.js"></script>
-      <script>
+<script src="https://cdn.auth0.com/js/auth0/9.3.1/auth0.min.js"></script>
+<script src="./static/js/jquery-3.1.0.min.js"></script>
+<script src="./static/js/store.js"></script>
+<script src="./static/js/require.js"></script>
+<script>
+  window.canddi_zendesk  = {
+      config : {
+        apiAuth:              'api.auth.canddi.com',
+        clientID:             'bNyem1TAHwV4teqptnJdqILPMUSupD1T',
+        domain:               'canddi.eu.auth0.com',
+        loginURL:             'https://s3-eu-west-1.amazonaws.com/dev-support.canddi.local/index.html'
+      },
+      user : {}
+    };
 
-        var lock = new Auth0Lock(
-                    'bNyem1TAHwV4teqptnJdqILPMUSupD1T',
-                    'canddi.eu.auth0.com',
-                    {
-                      container:      'root',
-                      languageDictionary: {
-                        emailInputPlaceholder: "Email",
-                        passwordInputPlaceholder: "Password",
-                        title: "Log in"
-                      },
-                      theme: {
-                        logo:           'https://s3-eu-west-1.amazonaws.com/auth0.canddi.com/canddi_logo.png',
-                        primaryColor:   '#ffa336',
-                        labeledSubmitButton: false
-                      },
-                      auth: {
-                        responseType: 'token'
-                      }
-                    }
-                );
-
-        if(window.location.hash) {
-            // Listen for the authenticated event and get profile
-            lock.on("authenticated", function(authResult) {
-                lock.getProfile(authResult.idToken, function(error, profile) {
-                    if (error) {
-                        fnShowLock("Sorry, an error occurred. " + error);
-                        return;
-                    }
-                    window.location = profile.zendesk_jwt_url;
-                });
-            });
-
-            lock.on("authorization_error", function(error) {
-                fnShowLock(error.error_description);
-            });
-        } else {
-            fnShowLock();
+    window.decodeJWT = function(token){
+        if (!token) return null;
+        var payload = token.split('.')[1];
+        if(!payload) return null;
+        //If the payload is encoded in Base64URL, transform into Base64
+        payload = payload.replace(/-/g, "+");
+        payload = payload.replace(/_/g, "/");
+        try {
+          return JSON.parse(atob(payload));
+        } catch (e) {
+          return null;
         }
+    };
 
-        /**
-         * Shows the Auth0 lock.
-         * @param  {String} err   An error to be displayed. (optional)
-         * @return {Void}
-         */
-        function fnShowLock(err) {
-            var objParams = {};
-            if(err) {
-                objParams.flashMessage = {
-                    type: 'error',
-                    text: err
-                }
+    var objConfig   = window.canddi_zendesk.config,
+    auth0       = new window.auth0.WebAuth({
+        domain:         objConfig.domain,
+        clientID:       objConfig.clientID,
+        redirectUri:    objConfig.loginURL,
+        responseType:   'token id_token'
+    }),
+    idToken     = store.get("id_token");
+
+    // If we followed a callback from auth0's login page, there will be an id_token in the hash
+    if(window.location.hash) {
+        var matches = window.location.hash.match(new RegExp('id_token=([^&]*)'));
+        if (matches) {
+            // Save token locally
+            store.set("id_token", matches[1]);
+            $(".navbar.navbar-default.navbar-fixed-top").hide();
+
+            var profile = decodeJWT(matches[1]);
+            window.location.href = profile.zendesk_jwt_url;
+        }
+        else {
+            auth0.authorize();
+        }
+    } else {
+        if (idToken) {
+            var profile = decodeJWT(idToken);
+            // If the profile expired from the store then show the auth0 login
+            if(!profile || Math.floor(Date.now() / 1000) > profile.exp) {
+                auth0.authorize();
+            } else {
+                window.location.href = profile.zendesk_jwt_url;
             }
-            lock.show(objParams);
+        } else {
+            auth0.authorize();
         }
-      </script>
-    </div>
-  </div>
+    }
+</script>
 </body>
 </html>
